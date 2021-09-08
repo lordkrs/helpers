@@ -143,11 +143,13 @@ def convert_csv_to_xlsx(csv_file, xlsx_file, delimiter=","):
                 print(line)
                 missed_lines_count += 1
             if len(data_list) >= MAX_LINES_IN_ONE_SHOT:
+                print("lines-loaded----{}".format(lines_loaded))
                 print("Total lines missed--->{}".format(missed_lines_count))    
                 final_file = create_xlsx(headers, data=data_list)
                 print("Your xlsx path is {}".format( final_file))
                 final_files.append(final_file)
                 data_list = []
+        print("lines-loaded----{}".format(lines_loaded))
         print("Total lines missed--->{}".format(missed_lines_count))    
         final_files.append(create_xlsx(headers, data=data_list))
         print("Your xlsx files are {}".format( ",".join(final_files)))
