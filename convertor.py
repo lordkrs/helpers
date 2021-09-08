@@ -126,21 +126,20 @@ def create_data(headers, row_data):
 
 def convert_csv_to_xlsx(csv_file, xlsx_file, delimiter=","):
     with open(csv_file, encoding="utf-8") as f:
-        data = f.readlines()
-    
-    data_list = []
-    headers = data[0].rstrip().replace('"',"").split(delimiter)
-    missed_lines_count = 0
-    for line in data[1:]:
-        line = line.rstrip()
-        try:
-            data_list.append(create_data(headers, line.replace('"',"").split(delimiter)))
-        except:
-            print(line)
-            missed_lines_count += 1
-    print("Total lines missed--->{}".format(missed_lines_count))    
-    final_file = create_xlsx(headers, data=data_list)
-    print("Your xlsx path is {}".format( final_file))
+        data_list = []
+        headers = f.readline().rstrip().replace('"',"").split(delimiter)
+        missed_lines_count = 0
+        print(headers)
+        while(line:=f.readline()):
+            line = line.rstrip()
+            try:
+                data_list.append(create_data(headers, line.replace('"',"").split(delimiter)))
+            except:
+                print(line)
+                missed_lines_count += 1
+        print("Total lines missed--->{}".format(missed_lines_count))    
+        final_file = create_xlsx(headers, data=data_list)
+        print("Your xlsx path is {}".format( final_file))
 
 if __name__ == "__main__":
     args = my_parser.parse_args()
