@@ -19,6 +19,7 @@ my_parser.add_argument('--csv_delimiter', metavar='csv_delimiter', type=str, hel
 
 SHEET_LIMIT = 50000
 MAX_SHEETS_PER_XLS = 7
+MAX_LINES_IN_ONE_SHOT = 300000
 
 def zipper(zip_file_name, files):
     zip_file_name = '{}{}{}.zip'.format(temp_path, os.path.sep, zip_file_name)
@@ -131,6 +132,7 @@ def convert_csv_to_xlsx(csv_file, xlsx_file, delimiter=","):
         missed_lines_count = 0
         print(headers)
         lines_loaded = 0
+        final_files = []
         while(line:=f.readline()):
             lines_loaded += 1
             print("lines-loaded----{}".format(lines_loaded),end="\r")
@@ -140,9 +142,15 @@ def convert_csv_to_xlsx(csv_file, xlsx_file, delimiter=","):
             except:
                 print(line)
                 missed_lines_count += 1
+            if len(data_list) >= MAX_LINES_IN_ONE_SHOT:
+                print("Total lines missed--->{}".format(missed_lines_count))    
+                final_file = create_xlsx(headers, data=data_list)
+                print("Your xlsx path is {}".format( final_file))
+                final_files.append(final_file)
+                data_list = []
         print("Total lines missed--->{}".format(missed_lines_count))    
-        final_file = create_xlsx(headers, data=data_list)
-        print("Your xlsx path is {}".format( final_file))
+        final_files.append(create_xlsx(headers, data=data_list))
+        print("Your xlsx files are {}".format( ",".join(final_files)))
 
 if __name__ == "__main__":
     args = my_parser.parse_args()
