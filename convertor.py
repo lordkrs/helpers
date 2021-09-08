@@ -130,7 +130,10 @@ def convert_csv_to_xlsx(csv_file, xlsx_file, delimiter=","):
         headers = f.readline().rstrip().replace('"',"").split(delimiter)
         missed_lines_count = 0
         print(headers)
+        lines_loaded = 0
         while(line:=f.readline()):
+            lines_loaded += 1
+            print("lines-loaded----{}".format(lines_loaded),end="\r")
             line = line.rstrip()
             try:
                 data_list.append(create_data(headers, line.replace('"',"").split(delimiter)))
